@@ -1,4 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/feespayment.dart';
+import 'package:intl/intl.dart';
+import 'package:myapp/summary.dart';
 
 class UserDashboard extends StatelessWidget {
   @override
@@ -7,7 +11,7 @@ class UserDashboard extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.purple,
         title: Text(
-          'User Dashboard',
+          'Cashier Dashboard',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -88,13 +92,13 @@ class UserDashboard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
-                'Welcome to your Dashboard',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+             Text(
+  'Welcome to your Dashboard\n${DateFormat.yMMMMd().add_jm().format(DateTime.now())}',
+  style: TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.bold,
+  ),
+),
               SizedBox(height: 20),
               Expanded(
                 child: GridView.count(
@@ -105,10 +109,10 @@ class UserDashboard extends StatelessWidget {
                     _buildDashboardButton(
                       context,
                       icon: Icons.payment,
-                      label: 'Payments',
+                      label: 'Fees Payments',
                       color: Colors.blue,
                       onPressed: () {
-                        // Handle Payments button tap
+                       Navigator.push(context, MaterialPageRoute(builder: (context)=>FeesPayment()));
                       },
                     ),
                     _buildDashboardButton(
@@ -122,11 +126,12 @@ class UserDashboard extends StatelessWidget {
                     ),
                     _buildDashboardButton(
                       context,
-                      icon: Icons.money,
-                      label: 'Pay Bills',
+                      icon: Icons.money_off_rounded,
+                      label: ' Summary',
                       color: Colors.orange,
                       onPressed: () {
-                        // Handle Pay Bills button tap
+                         Navigator.push(context, MaterialPageRoute(builder: (context)=>DailySummary()));
+                        
                       },
                     ),
                      _buildDashboardButton(
