@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:myapp/feespayment.dart';
 import 'package:intl/intl.dart';
 import 'package:myapp/summary.dart';
+import 'package:myapp/search.dart';
 
 class UserDashboard extends StatelessWidget {
   @override
@@ -59,9 +60,6 @@ class UserDashboard extends StatelessWidget {
                 // Handle payments tap
               },
             ),
-
-
-
             ListTile(
               leading: Icon(Icons.air),
               title: Text('Buy Airtime'),
@@ -92,13 +90,13 @@ class UserDashboard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-             Text(
-  'Welcome to your Dashboard\n${DateFormat.yMMMMd().add_jm().format(DateTime.now())}',
-  style: TextStyle(
-    fontSize: 24,
-    fontWeight: FontWeight.bold,
-  ),
-),
+              Text(
+                'Welcome to your Dashboard\n${DateFormat.yMMMMd().add_jm().format(DateTime.now())}',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               SizedBox(height: 20),
               Expanded(
                 child: GridView.count(
@@ -112,7 +110,10 @@ class UserDashboard extends StatelessWidget {
                       label: 'Fees Payments',
                       color: Colors.blue,
                       onPressed: () {
-                       Navigator.push(context, MaterialPageRoute(builder: (context)=>FeesPayment()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => FeesPayment()));
                       },
                     ),
                     _buildDashboardButton(
@@ -130,11 +131,13 @@ class UserDashboard extends StatelessWidget {
                       label: ' Summary',
                       color: Colors.orange,
                       onPressed: () {
-                         Navigator.push(context, MaterialPageRoute(builder: (context)=>DailySummary()));
-                        
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => DailySummary()));
                       },
                     ),
-                     _buildDashboardButton(
+                    _buildDashboardButton(
                       context,
                       icon: Icons.receipt,
                       label: 'Pay Bills',
@@ -143,16 +146,16 @@ class UserDashboard extends StatelessWidget {
                         // Handle Pay Bills button tap
                       },
                     ),
-                     _buildDashboardButton(
-                      context,
-                      icon: Icons.sell,
-                      label: 'Pay Bills',
-                      color: Colors.orange,
-                      onPressed: () {
-                        // Handle Pay Bills button tap
-                      },
-                    ),
-                     _buildDashboardButton(
+                    _buildDashboardButton(context,
+                        icon: Icons.search,
+                        label: 'Search',
+                        color: Colors.orange, onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SearchScreen()));
+                    }),
+                    _buildDashboardButton(
                       context,
                       icon: Icons.receipt,
                       label: 'Pay Bills',
@@ -161,7 +164,7 @@ class UserDashboard extends StatelessWidget {
                         // Handle Pay Bills button tap
                       },
                     ),
-                     _buildDashboardButton(
+                    _buildDashboardButton(
                       context,
                       icon: Icons.receipt,
                       label: 'Pay Bills',

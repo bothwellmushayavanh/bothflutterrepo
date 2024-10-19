@@ -40,7 +40,7 @@ class DatabaseHelper {
     ''');
 
 
-    
+
   }
 
   Future<int> insertPayment(Map<String, dynamic> row) async {
