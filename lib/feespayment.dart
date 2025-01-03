@@ -67,16 +67,14 @@ class _FeesPaymentState extends State<FeesPayment> {
                           decoration: InputDecoration(
                             suffixIcon: Icon(Icons.check, color: Colors.grey),
                             label: Text(
-                              'Student Name',
+                              'Student Number',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Color(0xffB81736),
                               ),
                             ),
                           ),
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]')),
-                          ],
+                        
                         ),
                         SizedBox(height: 20),
                         TextField(
