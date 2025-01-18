@@ -1,9 +1,43 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:myapp/log.dart';
+import 'package:myapp/login.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
+
+  @override
+  _RegisterScreenState createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  final _auth = FirebaseAuth.instance;
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  void registerUser() async {
+    try {
+      await _auth.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Registration Successful!")),
+      );
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.message ?? "Registration Failed")),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -42,21 +76,21 @@ class RegisterScreen extends StatelessWidget {
                 ),
                 height: double.infinity,
                 width: double.infinity,
-                child: SingleChildScrollView(  // Wrap the Column in SingleChildScrollView
+                child: SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20.0, right: 20.0),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(height: 40), // Added spacing at the top
+                        SizedBox(height: 40),
                         TextField(
+                          controller: _emailController,
                           decoration: InputDecoration(
                             suffixIcon: Icon(
                               Icons.check,
                               color: Colors.grey,
                             ),
                             label: Text(
-                              'Username',
+                              'Email',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Color(0xffB81736),
@@ -64,8 +98,9 @@ class RegisterScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        SizedBox(height: 20,),
+                        SizedBox(height: 20),
                         TextField(
+                          controller: _passwordController,
                           decoration: InputDecoration(
                             suffixIcon: Icon(
                               Icons.visibility_off,
@@ -79,103 +114,54 @@ class RegisterScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                        ),
-                       
-
-                        SizedBox(height: 40), // Added spacing at the top
-                        TextField(
-                          decoration: InputDecoration(
-                            suffixIcon: Icon(
-                              Icons.check,
-                              color: Colors.grey,
-                            ),
-                            label: Text(
-                              'Username',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xffB81736),
-                              ),
-                            ),
-                          ),
-                        ),
-
-
-                         SizedBox(height: 40), // Added spacing at the top
-                        TextField(
-                          decoration: InputDecoration(
-                            suffixIcon: Icon(
-                              Icons.check,
-                              color: Colors.grey,
-                            ),
-                            label: Text(
-                              'Username',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xffB81736),
-                              ),
-                            ),
-                          ),
-                        ),
-
-SizedBox(height: 40),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            'Forget Password',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xffB81736),
-                            ),
-                          ),
+                          obscureText: true,
                         ),
                         SizedBox(height: 50),
-                        Container(
-                          height: 55,
-                          width: 300,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                            gradient: LinearGradient(
-                              colors: const [Color(0xffb81736), Color(0xff281537)],
+                        GestureDetector(
+                          onTap: registerUser, // Register user on button tap
+                          child: Container(
+                            height: 55,
+                            width: 300,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              gradient: LinearGradient(
+                                colors: const [Color(0xffb81736), Color(0xff281537)],
+                              ),
                             ),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'SIGN IN',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: Colors.white,
+                            child: Center(
+                              child: Text(
+                                'REGISTER',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ),
                         ),
-                        SizedBox(height: 170), // Adjusted spacing
+                        SizedBox(height: 20),
                         Align(
-                          alignment: Alignment.bottomRight,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: const [
-                              Text(
-                                "Don't have an account?",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey,
-                                ),
+                          alignment: Alignment.center,
+                          child: GestureDetector(
+                            onTap: () {
+                              // Add navigation logic to your Login Screen
+                           Navigator.push(
+  context,
+  MaterialPageRoute(builder: (context) => LoginScreen()),
+);
+
+                            },
+                            child: Text(
+                              "Already have an account? Sign in",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Color(0xffB81736),
+                                fontWeight: FontWeight.bold,
                               ),
-                              Text(
-                                "Sign up",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
                         ),
-                        SizedBox(height: 20), // Add extra space at the bottom
                       ],
                     ),
                   ),

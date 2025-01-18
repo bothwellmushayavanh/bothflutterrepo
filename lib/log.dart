@@ -1,9 +1,52 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:myapp/user/userdashboard.dart';
+
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  LoginScreen({Key? key}) : super(key: key);
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  final FirebaseAuth _auth = FirebaseAuth.instance; // Firebase Authentication instance
+
+  Future<void> _loginUser(BuildContext context) async {
+  String email = _emailController.text.trim();
+  String password = _passwordController.text.trim();
+
+  try {
+    UserCredential userCredential = await _auth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+
+    // Check if the user is authenticated
+    if (userCredential.user != null) {
+      // Navigate to the dashboard
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => UserDashboard()),
+      );
+    }
+  } on FirebaseAuthException catch (e) {
+    String message;
+    if (e.code == 'user-not-found') {
+      message = 'No user found for that email.';
+    } else if (e.code == 'wrong-password') {
+      message = 'Incorrect password.';
+    } else {
+      message = 'An error occurred. Please try again.';
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
+  }
+}
+
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -21,7 +64,7 @@ class LoginScreen extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(top: 70.0, left: 22),
                 child: Text(
-                  'Sign in',
+                  'Sign in ',
                   style: TextStyle(
                     fontSize: 30,
                     color: Colors.white,
@@ -42,30 +85,33 @@ class LoginScreen extends StatelessWidget {
                 ),
                 height: double.infinity,
                 width: double.infinity,
-                child: SingleChildScrollView(  // Wrap the Column in SingleChildScrollView
+                child: SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20.0, right: 20.0),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(height: 40), // Added spacing at the top
+                        SizedBox(height: 40),
                         TextField(
+                          controller: _emailController,
                           decoration: InputDecoration(
                             suffixIcon: Icon(
                               Icons.check,
                               color: Colors.grey,
                             ),
                             label: Text(
-                              'Username',
+                              'Email',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Color(0xffB81736),
                               ),
                             ),
                           ),
+                          keyboardType: TextInputType.emailAddress,
                         ),
-                        SizedBox(height: 20,),
+                        SizedBox(height: 20),
                         TextField(
+                          controller: _passwordController,
                           decoration: InputDecoration(
                             suffixIcon: Icon(
                               Icons.visibility_off,
@@ -79,6 +125,7 @@ class LoginScreen extends StatelessWidget {
                               ),
                             ),
                           ),
+                          obscureText: true,
                         ),
                         SizedBox(height: 20),
                         Align(
@@ -102,30 +149,33 @@ class LoginScreen extends StatelessWidget {
                               colors: const [Color(0xffb81736), Color(0xff281537)],
                             ),
                           ),
-                         child: ElevatedButton(
-    onPressed: () {
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>UserDashboard()));
-    },
-    style: ElevatedButton.styleFrom(
-         // Text color
-      minimumSize: Size(300, 55), // Set the size of the button
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30), // Rounded corners
-      ),
-    ),
-    child: Center(
-      child: Text(
-        'SIGN IN',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-          color: Colors.white,
-        ),
-      ),
-    ),
-  ),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              // _loginUser(context);
+                               Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => UserDashboard()),
+      );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: Size(300, 55),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                            ),
+                            child: Center(
+                              child: Text(
+                                'SIGN IN',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
-                        SizedBox(height: 170), // Adjusted spacing
+                        SizedBox(height: 170),
                         Align(
                           alignment: Alignment.bottomRight,
                           child: Column(
@@ -150,7 +200,7 @@ class LoginScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        SizedBox(height: 20), // Add extra space at the bottom
+                        SizedBox(height: 20),
                       ],
                     ),
                   ),
